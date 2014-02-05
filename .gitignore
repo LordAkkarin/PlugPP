@@ -1,0 +1,15 @@
+# Eclipse
+##########
+.classpath
+.project
+.settings/
+
+# IDEA
+##########
+.idea
+*.iml
+
+# Grunt
+########
+node_modules/
+dist/script/
