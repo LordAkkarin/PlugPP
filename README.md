@@ -9,7 +9,7 @@ The script currently includes the following features:
 * Desktop-Notifications (please refer to the [Supported Browsers][]-Section)
 * Moderation Utilities
     * History Warnings
-    ** AFK Warnings
+    * AFK Warnings
 
 Supported Browsers
 ------------------
