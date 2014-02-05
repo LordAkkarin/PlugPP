@@ -6,7 +6,7 @@ The script currently includes the following features:
 * Auto-Woot
 * Auto-Join (for waitlists)
 * Advanced Service-Notifications
-* Desktop-Notifications (please refer to the [Supported Browsers][]-Section)
+* Desktop-Notifications (please refer to the [Supported Browsers][#supported-browsers]-Section)
 * Moderation Utilities
     * History Warnings
     * AFK Warnings
