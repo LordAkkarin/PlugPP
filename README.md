@@ -2,6 +2,7 @@ Plug++
 ======
 This script extends the service [plug.dj][plugdj] with useful new features.
 The script currently includes the following features:
+
 * Auto-Woot
 * Auto-Join (for waitlists)
 * Advanced Service-Notifications
@@ -20,17 +21,20 @@ The use of Firefox or Chrome is recommended.
 Building
 --------
 This software used `grunt`. Please follow these steps to install the build tool:
+
 1. Download & Install [node.js][nodejs]
 1. Install the grunt CLI by issuing `npm install -g grunt-cli` from your command line
 
 To build the package you need to follow these steps:
+
 1. Install the dependencies by issuing `npm install` from the command line (in the project directory)
 1. Issue `grunt` to start the process.
 
 Additionally the build takes the following arguments:
-`baseURL` - Replaces the default base URL (http://localhost/Plug++/dist/) against a custom one. This is needed for loading graphics and other resources.
-`version` - Replaces the current application version against a custom version (by default it will use the version supplied by the `package.json` file).
-`versionSuffix` - Appends a custom string to the version (for usage in CI systems as example).
+
+* `baseURL` - Replaces the default base URL (http://localhost/Plug++/dist/) against a custom one. This is needed for loading graphics and other resources.
+* `version` - Replaces the current application version against a custom version (by default it will use the version supplied by the `package.json` file).
+* `versionSuffix` - Appends a custom string to the version (for usage in CI systems as example).
 
 Terms of Use
 --------------------
@@ -56,4 +60,5 @@ You should have received a copy of the [GNU Lesser General Public License][LGPL]
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 [plugdj]: http://plug.dj
+[nodejs]: http://nodejs.org/
 [LGPL]: http://www.gnu.org/licenses/lgpl.txt
