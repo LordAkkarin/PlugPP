@@ -40,6 +40,11 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		},
 
 		/**
+		 * Stores the stylesheet element.
+		 */
+		stylesheet:		null,
+
+		/**
 		 * Stores all internal event timers.
 		 */
 		timers:			{
@@ -47,9 +52,17 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			updateCheck:		null
 		},
 
+		/**
+		 * Stores all timeout IDs.
+		 */
 		timeouts:		{
 			autoWoot:		null
 		},
+
+		/**
+		 * Stores the UI root element.
+		 */
+		ui:			null,
 
 		/**
 		 * Stores the current plug.dj user.
@@ -64,13 +77,15 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			this.verifyAPI ();
 
 			// load options
-			if (typeof ModificationAPI.getStorage ('options') == 'object') {
+			/* if (typeof ModificationAPI.getStorage ('options') == 'object') {
 				this.options = _.extend (this.options, (ModificationAPI.getStorage ('options') || { }));
-			}
+			} */
 
 			// register events and timers
 			this.registerTimers ();
 			this.registerEvents ();
+
+			this.injectUI ();
 
 			// notify user
 			ModificationAPI.notifyChat ('system', 'Loaded Plug++ v' + Version, null);
@@ -87,6 +102,53 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			if (!!console) {
 				console.debug (message);
 			}
+		},
+
+		/**
+		 * Injects the UI template.
+		 */
+		injectUI:		function () {
+			// append stylesheets
+			this.stylesheet = $('<link rel="stylesheet" type="text/css" href="' + ResourceLoader.get ('style', 'plug-pp.min.css') + '" />');
+
+			// append to document
+			$('head').append (this.stylesheet);
+
+			// append element to document
+			$('body').append (
+				'<div id="plugPP">' +
+					'<ul id="plugPPNavigation">' +
+						'<li id="plugpp-autowoot" class="plug-pp-button plug-pp-button-autowoot"></li>' +
+						'<li id="plugpp-autojoin" class="plug-pp-button plug-pp-button-autojoin"></li>' +
+						'<li id="plugpp-notification" class="plug-pp-button plug-pp-button-notification"></li>' +
+						'<li id="plugpp-desktop-notification" class="plug-pp-button plug-pp-button-desktop-notification"></li>' +
+						'<li id="plugpp-moderator" class="plug-pp-button plug-pp-button-moderator"></li>' +
+					'</ul>' +
+				'</div>'
+			);
+
+			// get root element
+			this.ui = $('#plugPPNavigation');
+
+			// hook links
+			$('#plugpp-autowoot').click ($.proxy (function () {
+				if ($('#plugpp-autwoot').hasClass ('disabled')) {
+					return;
+				}
+
+				this.options.components.autoWoot = !this.options.components.autoWoot;
+
+				if (this.options.components.autoWoot) {
+					$('#plugpp-autowoot').addClass ('active');
+
+					// woot
+					if (ModificationAPI.getUser ().vote === 0) {
+						ModificationAPI.votePositive ();
+					}
+				} else {
+					$('#plugpp-autowoot').removeClass ('active');
+				}
+			}, this));
 		},
 
 		/**
@@ -164,7 +226,15 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			ModificationAPI.notifyChat ('system', 'Disabling Plug++ ...', null);
 
 			// store settings
-			ModificationAPI.setStorage ('options', this.options);
+			// ModificationAPI.setStorage ('options', this.options);
+
+			if (!!this.stylesheet) {
+				this.stylesheet.remove (this.stylesheet);
+			}
+
+			if (!!this.ui) {
+				this.ui.remove ();
+			}
 
 			// un-register events and timers
 			this.unregisterTimers ();
