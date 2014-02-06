@@ -1,0 +1,84 @@
+/**
+ * Plug++ Grunt Buildfile
+ * @author			Johannes Donath <johannesd@evil-co.com>
+ * @copyright			Copyright (C) 2014 Evil-Co <http://www.evil-co.org>
+ * @license			GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.txt>
+ */
+#plugPPNavigation {
+	list-style-type:		none;
+	padding:			0;
+	width:				52px;
+	margin-top:			60px;
+}
+
+.plug-pp-button,
+.plug-pp-button-background {
+	background-image:		url(../image/buttons.png);
+	background-repeat:		no-repeat;
+
+	background-position:		top left;
+	width:				52px;
+	height:				49px;
+
+	cursor:				pointer;
+}
+
+.plug-pp-button-autowoot {
+	background-position:		0 0;
+
+	&.active {
+		background-position:	-54px 0;
+	}
+
+	&.disabled {
+		background-position:	-107px 0;
+	}
+}
+
+.plug-pp-button-autojoin {
+	background-position:		0 -49px;
+
+	&.active {
+		background-position:	-54px -49px;
+	}
+
+	&.disabled {
+		background-position:	-107px -49px;
+	}
+}
+
+.plug-pp-button-notification {
+	background-position:		0 -98px;
+
+	&.active {
+		background-position:	-54px -98px;
+	}
+
+	&.disabled {
+		background-position:	-107px -98px;
+	}
+}
+
+.plug-pp-button-desktop-notification {
+	background-position:		0 -146px;
+
+	&.active {
+		background-position:	-54px -146px;
+	}
+
+	&.disabled {
+		background-position:	-107px -146px;
+	}
+}
+
+.plug-pp-button-moderator {
+	background-position:		0 -194px;
+
+	&.active {
+		background-position:	-54px -194px;
+	}
+
+	&.disabled {
+		background-position:	-107px -194px;
+	}
+}
