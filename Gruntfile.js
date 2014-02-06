@@ -54,6 +54,12 @@ module.exports = function (grunt) {
 				dest:					'dist/script/obfuscation.json'
 			}
 		},
+		copy:			{
+			images:				{
+				src:					['image/*.png', 'image/*.jpg', 'image/*.jpeg'],
+				dest:					'dist/'
+			}
+		},
 		csslint:		{
 			options:			{
 				csslintrc:				'less/.csslintrc'
@@ -128,5 +134,5 @@ module.exports = function (grunt) {
 	});
 
 	// default task
-	grunt.registerTask ('default', ['clean', 'jshint', 'less', 'concat', 'uglify', 'csslint', 'version']);
+	grunt.registerTask ('default', ['clean', 'jshint', 'less', 'concat', 'uglify', 'csslint', 'copy', 'version']);
 };

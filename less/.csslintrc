@@ -6,6 +6,7 @@
 	"floats":			false,
 	"font-sizes":			false,
 	"gradients":			false,
+	"ids":				false,
 	"important":			false,
 	"known-properties":		false,
 	"outline-none":			false,
@@ -13,7 +14,7 @@
 	"regex-selectors":		false,
 	"shorthand":			false,
 	"text-indent":			false,
+	"qualified-headings":		false,
 	"unique-headings":		false,
-	"universal-selector":		false,
 	"unqualified-attributes":	false
 }
