@@ -31,7 +31,9 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 				autoJoin:		false,
 				moderator:		{
 					historyNotification:		true
-				}
+				},
+				notification:		false,
+				desktopNotification:	false
 			},
 
 			autoWoot:		{
@@ -134,6 +136,10 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 				$('#plugpp-moderator').addClass ('disabled');
 			}
 
+			if (!ModificationAPI.isNotificationAvailable ()) {
+				$('#plugpp-desktop-notification').addClass ('disabled');
+			}
+
 			// hook links
 			$('#plugpp-autowoot').click ($.proxy (function () {
 				if ($('#plugpp-autwoot').hasClass ('disabled')) {
@@ -153,6 +159,25 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 					$('#plugpp-autowoot').removeClass ('enabled');
 				}
 			}, this));
+
+			$('#plugpp-desktop-notification').click ($.proxy (function () {
+				if ($('#plugpp-desktop-notification').hasClass ('disabled')) {
+					return;
+				}
+
+				this.options.components.desktopNotification = !this.options.components.desktopNotification;
+
+				// request permissions
+				if (this.options.components.desktopNotification) {
+					if (!ModificationAPI.notifyRequestPermissions (function () {
+						$('#plugpp-desktop-notification').addClass ('enabled');
+					})) {
+						$('#plugpp-desktop-notification').addClass ('disabled');
+					}
+				} else {
+					$('#plugpp-desktop-notification').removeClass ('enabled');
+				}
+			}));
 		},
 
 		/**
@@ -191,7 +216,23 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			// history check
 			if (this.options.components.moderator.historyNotification) {
 				// get history from API
-				ModificationAPI.getHistory ();
+				var history = ModificationAPI.getHistory ();
+
+				$(history).each ($.proxy (function (index, value) {
+					// skip first element (e.g. current track)
+					if (index === 0) {
+						return true;
+					}
+
+					// check ID (pretty obvious)
+					// TODO: Add verification of the title (90% match)
+					if (data.media.id === value.id) {
+						ModificationAPI.notifyChat ('system', 'This song is already in the history (' + (index + 1) + ' out of ' + history.length + '). <a href="javascript:window.PlugPP.skipTrack ();">Click here to skip</a>');
+
+						// break out of each ()
+						return false;
+					}
+				}, this));
 			}
 		},
 

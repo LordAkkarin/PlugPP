@@ -84,12 +84,22 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		},
 
 		/**
+		 * Checks whether the Notification API is available.
+		 * @returns {boolean}
+		 */
+		isNotificationAvailable:	function () {
+			// verify API
+			return (window.Notification !== undefined && window.Notification !== null);
+
+		},
+
+		/**
 		 * Checks whether the storage API is available.
 		 * @returns {boolean}
 		 */
 		isStorageAvailable:		function () {
 			try {
-				return (window.localStorage !== undefined && window.localStorage != null);
+				return (window.localStorage !== undefined && window.localStorage !== null);
 			} catch (error) {
 				return false;
 			}
@@ -160,7 +170,7 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 */
 		notifyImportant:		function (title, message, icon) {
 			// verify API
-			if (window.Notification === undefined) {
+			if (!this.isNotificationAvailable ()) {
 				this.notify (title + '<br />' + message, null);
 				return;
 			}
@@ -181,14 +191,17 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 * Requests notification API permissions.
 		 * @returns {boolean}
 		 */
-		notifyRequestPermissions:	function () {
-			// verify API
-			if (!window.prototype.hasOwnProperty ('Notification')) {
+		notifyRequestPermissions:	function (callback) {
+			if (!this.isNotificationAvailable ()) {
 				return false;
 			}
 
 			// check permission
 			if (Notification.permission === 'granted') {
+				// issue callback
+				callback ();
+
+				// yep everything is fine
 				return true;
 			}
 
@@ -199,6 +212,11 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 					// store value (chrome workaround)
 					if (Notification.permission === undefined) {
 						Notification.permission = permission;
+					}
+
+					// issue callback
+					if (permission === 'granted' && callback !== undefined && callback !== null) {
+						callback ();
 					}
 				});
 			}
