@@ -8,11 +8,14 @@
 ##########
 .idea
 *.iml
+less/*.css
 
 # Grunt
 ########
 node_modules/
 dist/script/
+dist/image/
+dist/style/
 
 # System Dependent
 ##################
