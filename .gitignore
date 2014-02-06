@@ -13,3 +13,8 @@
 ########
 node_modules/
 dist/script/
+
+# Graphic Files
+# Note: These files are not available to the public due to license restrictions.
+########
+image/buttons.svg
