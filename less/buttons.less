@@ -4,81 +4,107 @@
  * @copyright			Copyright (C) 2014 Evil-Co <http://www.evil-co.org>
  * @license			GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.txt>
  */
-#plugPPNavigation {
-	list-style-type:		none;
-	padding:			0;
-	width:				52px;
+// variables
+@menuSize:				52px;
+@iconWidth:				33px;
+@iconHeight:				30px;
+@iconSpacing:				15px;
+
+@positionDefault:			0;
+@positionDisabled:			-33px;
+@positionEnabled:			-66px;
+
+#plugPP {
+	position:			absolute;
+	width:				@iconWidth;
 	margin-top:			60px;
 }
 
-.plug-pp-button,
-.plug-pp-button-background {
-	background-image:		url(../image/buttons.png);
-	background-repeat:		no-repeat;
-
-	background-position:		top left;
-	width:				52px;
-	height:				49px;
-
-	cursor:				pointer;
+#plugPPNavigation {
+	list-style-type:		none;
+	padding:			0;
 }
 
-.plug-pp-button-autowoot {
-	background-position:		0 0;
+.plug-pp-button {
+	width:				((@menuSize - @iconWidth) / 2);
+	height:				((@menuSize - @iconHeight) / 2);
 
-	&.active {
-		background-position:	-54px 0;
+	padding:			((@menuSize - @iconHeight) / 2) ((@menuSize - @iconWidth) / 2);
+	margin-bottom:			@iconSpacing;
+
+	.plug-pp-button-autowoot,
+	.plug-pp-button-autojoin,
+	.plug-pp-button-notification,
+	.plug-pp-button-desktop-notification,
+	.plug-pp-button-moderator {
+		width:			@iconWidth;
+		height:			@iconHeight;
+
+		display:		block;
+
+		background-image:	url(../image/buttons.png);
+		background-repeat:	no-repeat;
+
+		cursor:			pointer;
 	}
 
-	&.disabled {
-		background-position:	-107px 0;
-	}
-}
+	.plug-pp-button-autowoot {
+		background-position:	@positionDefault 0;
 
-.plug-pp-button-autojoin {
-	background-position:		0 -49px;
+		&.enabled {
+			background-position:	@positionEnabled 0;
+		}
 
-	&.active {
-		background-position:	-54px -49px;
-	}
-
-	&.disabled {
-		background-position:	-107px -49px;
-	}
-}
-
-.plug-pp-button-notification {
-	background-position:		0 -98px;
-
-	&.active {
-		background-position:	-54px -98px;
+		&.disabled {
+			background-position:	@positionDisabled 0;
+		}
 	}
 
-	&.disabled {
-		background-position:	-107px -98px;
-	}
-}
+	.plug-pp-button-autojoin {
+		background-position:	@positionDefault -30px;
 
-.plug-pp-button-desktop-notification {
-	background-position:		0 -146px;
+		&.enabled {
+			background-position:	@positionEnabled -30px;
+		}
 
-	&.active {
-		background-position:	-54px -146px;
-	}
-
-	&.disabled {
-		background-position:	-107px -146px;
-	}
-}
-
-.plug-pp-button-moderator {
-	background-position:		0 -194px;
-
-	&.active {
-		background-position:	-54px -194px;
+		&.disabled {
+			background-position:	@positionDisabled -30px;
+		}
 	}
 
-	&.disabled {
-		background-position:	-107px -194px;
+	.plug-pp-button-notification {
+		background-position:	@positionDefault -60px;
+
+		&.enabled {
+			background-position:	@positionEnabled -60px;
+		}
+
+		&.disabled {
+			background-position:	@positionDisabled -60px;
+		}
+	}
+
+	.plug-pp-button-desktop-notification {
+		background-position:	@positionDefault -90px;
+
+		&.enabled {
+			background-position:	@positionEnabled -90px;
+		}
+
+		&.disabled {
+			background-position:	@positionDisabled -90px;
+		}
+	}
+
+	.plug-pp-button-moderator {
+		background-position:	@positionDefault -120px;
+
+		&.enabled {
+			background-position:	@positionEnabled -120px;
+		}
+
+		&.disabled {
+			background-position:	@positionDisabled -120px;
+		}
 	}
 }
