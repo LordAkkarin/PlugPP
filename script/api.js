@@ -57,6 +57,15 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		},
 
 		/**
+		 * Returns the user object for a specific user.
+		 * @param userID
+		 * @returns {*}
+		 */
+		getUser:			function (userID) {
+			return API.getUser (userID);
+		},
+
+		/**
 		 * Checks whether the storage API is available.
 		 * @returns {boolean}
 		 */
