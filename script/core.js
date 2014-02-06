@@ -9,7 +9,6 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 
 	// constants
 	var POLL_RATES = {
-		USER_POLL:	60000,
 		UPDATE_CHECK:	900000
 	};
 
@@ -29,6 +28,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		options:		{
 			components:		{
 				autoWoot:		false,
+				autoJoin:		false,
 				moderator:		{
 					historyNotification:		true
 				}
@@ -48,7 +48,6 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 * Stores all internal event timers.
 		 */
 		timers:			{
-			pollUser:		null,
 			updateCheck:		null
 		},
 
@@ -91,7 +90,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			ModificationAPI.notifyChat ('system', 'Loaded Plug++ v' + Version, null);
 
 			// debug log
-			this.debug ('Running as user ' + this.user.username);
+			this.debug ('Running as user ' + ModificationAPI.getUser ().username);
 		},
 
 		/**
@@ -109,7 +108,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 */
 		injectUI:		function () {
 			// append stylesheets
-			this.stylesheet = $('<link rel="stylesheet" type="text/css" href="' + ResourceLoader.get ('style', 'plug-pp.min.css') + '" />');
+			this.stylesheet = $('<link rel="stylesheet" type="text/css" href="' + ResourceLoader.get ('style', 'plug-pp.min.css') + '?cache=' + Math.floor (Math.random () * 100) + '" />');
 
 			// append to document
 			$('head').append (this.stylesheet);
@@ -118,17 +117,22 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			$('body').append (
 				'<div id="plugPP">' +
 					'<ul id="plugPPNavigation">' +
-						'<li id="plugpp-autowoot" class="plug-pp-button plug-pp-button-autowoot"></li>' +
-						'<li id="plugpp-autojoin" class="plug-pp-button plug-pp-button-autojoin"></li>' +
-						'<li id="plugpp-notification" class="plug-pp-button plug-pp-button-notification"></li>' +
-						'<li id="plugpp-desktop-notification" class="plug-pp-button plug-pp-button-desktop-notification"></li>' +
-						'<li id="plugpp-moderator" class="plug-pp-button plug-pp-button-moderator"></li>' +
+						'<li class="plug-pp-button"><a id="plugpp-autowoot" class="plug-pp-button-autowoot"></a></li>' +
+						'<li class="plug-pp-button"><a id="plugpp-autojoin" class="plug-pp-button-autojoin"></a></li>' +
+						'<li class="plug-pp-button"><a id="plugpp-notification" class="plug-pp-button-notification"></a></li>' +
+						'<li class="plug-pp-button"><a id="plugpp-desktop-notification" class="plug-pp-button-desktop-notification"></a></li>' +
+						'<li class="plug-pp-button"><a id="plugpp-moderator" class="plug-pp-button-moderator"></a></li>' +
 					'</ul>' +
 				'</div>'
 			);
 
 			// get root element
 			this.ui = $('#plugPPNavigation');
+
+			// enable/disable options
+			if (!ModificationAPI.hasPermission (null, ModificationAPI.getRole ('bouncer'))) {
+				$('#plugpp-moderator').addClass ('disabled');
+			}
 
 			// hook links
 			$('#plugpp-autowoot').click ($.proxy (function () {
@@ -139,14 +143,14 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 				this.options.components.autoWoot = !this.options.components.autoWoot;
 
 				if (this.options.components.autoWoot) {
-					$('#plugpp-autowoot').addClass ('active');
+					$('#plugpp-autowoot').addClass ('enabled');
 
 					// woot
 					if (ModificationAPI.getUser ().vote === 0) {
 						ModificationAPI.votePositive ();
 					}
 				} else {
-					$('#plugpp-autowoot').removeClass ('active');
+					$('#plugpp-autowoot').removeClass ('enabled');
 				}
 			}, this));
 		},
@@ -192,13 +196,6 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		},
 
 		/**
-		 * Polls the current user instance.
-		 */
-		pollUser:		function () {
-			this.user = API.getUser ();
-		},
-
-		/**
 		 * Registers all API events.
 		 */
 		registerEvents:		function () {
@@ -210,11 +207,9 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 */
 		registerTimers:		function () {
 			// execute timer functions
-			this.pollUser ();
 			this.updateCheck ();
 
 			// register interval
-			this.timers.pollUser = window.setInterval (this.pollUser, POLL_RATES.USER_POLL);
 			this.timers.updateCheck = window.setInterval (this.updateCheck, POLL_RATES.UPDATE_CHECK);
 		},
 
@@ -261,7 +256,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 * Un-Registers all internal timers.
 		 */
 		unregisterTimers:	function () {
-			window.clearInterval (this.timers.pollUser);
+			window.clearInterval (this.timers.updateCheck);
 		},
 
 		/**

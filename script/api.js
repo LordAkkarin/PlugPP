@@ -44,6 +44,15 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		},
 
 		/**
+		 * Returns the role.
+		 * @param key
+		 * @returns {*}
+		 */
+		getRole:			function (key) {
+			return API.ROLE[key.toUpperCase ()];
+		},
+
+		/**
 		 * Returns an element from the application storage object.
 		 * @param key
 		 * @returns {*}
@@ -63,6 +72,15 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 */
 		getUser:			function (userID) {
 			return API.getUser (userID);
+		},
+
+		/**
+		 * Checks whether a user has at least the supplied permission level.
+		 * @param userID
+		 * @param role
+		 */
+		hasPermission:			function (userID, role) {
+			return API.hasPermission (userID, role);
 		},
 
 		/**
