@@ -14,6 +14,10 @@
 node_modules/
 dist/script/
 
+# System Dependent
+##################
+Thumbs.db
+
 # Graphic Files
 # Note: These files are not available to the public due to license restrictions.
 ########
