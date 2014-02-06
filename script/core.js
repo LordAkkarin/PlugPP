@@ -161,7 +161,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 */
 		shutdown:		function () {
 			// notify user
-			ModificationAPI.notifyChat ('system', 'Disabling Plug++ ...');
+			ModificationAPI.notifyChat ('system', 'Disabling Plug++ ...', null);
 
 			// store settings
 			ModificationAPI.setStorage ('options', this.options);
