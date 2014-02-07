@@ -62,7 +62,7 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 				return null;
 			}
 
-			return window.localStorage.getItem (key);
+			return window.localStorage.getItem ('pp-' + key);
 		},
 
 		/**
@@ -103,6 +103,17 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 			} catch (error) {
 				return false;
 			}
+		},
+
+		/**
+		 * Tries to join the wait list.
+		 */
+		joinWaitList:			function () {
+			if (this.getUser ().wlIndex !== undefined) {
+				return;
+			}
+
+			$('#dj-button').click ();
 		},
 
 		/**
@@ -240,7 +251,7 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 * @param data
 		 */
 		setStorage:			function (key, data) {
-			window.localStorage.setItem (key, data);
+			window.localStorage.setItem ('pp-' + key, data);
 		},
 
 		/**
