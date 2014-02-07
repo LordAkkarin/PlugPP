@@ -14,3 +14,4 @@ Homepage: http://glyphicons.com/
 License: http://glyphicons.com/license/
 Affected Files:
 * buttons.png
+* mention.png
