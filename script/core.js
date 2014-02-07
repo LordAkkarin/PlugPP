@@ -278,12 +278,20 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		},
 
 		/**
+		 * Handles chat events.
+		 * @param data
+		 */
+		onChat:			function (data) {
+
+		},
+
+		/**
 		 * Handles DJ Advance events.
 		 * @param data
 		 */
 		onDjAdvance:		function (data) {
 			// auto woot
-			if (this.options.components.autoWoot) {
+			if (this.options.components.autoWoot && data !== null) {
 				// clear previous auto woot
 				if (this.timeouts.autoWoot !== null) {
 					window.clearTimeout (this.timeouts.autoWoot);
@@ -316,7 +324,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			}
 
 			// history check
-			if (this.options.components.moderator.historyNotification) {
+			if (this.options.components.moderator.historyNotification && data !== null) {
 				// get history from API
 				var history = ModificationAPI.getHistory ();
 
@@ -343,6 +351,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 */
 		registerEvents:		function () {
 			ModificationAPI.registerEvent (API.DJ_ADVANCE, this.onDjAdvance, this);
+			ModificationAPI.registerEvent (API.CHAT, this.onChat, this);
 		},
 
 		/**
