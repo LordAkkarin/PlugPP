@@ -323,7 +323,9 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 
 			// auto join
 			if (this.options.components.autoJoin) {
-				ModificationAPI.joinWaitList ();
+				if (data === null || data.dj === null || (data.dj.id !== ModificationAPI.getUser ().id)) {
+					ModificationAPI.joinWaitList ();
+				}
 			}
 
 			// history check

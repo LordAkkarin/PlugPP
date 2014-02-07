@@ -109,7 +109,7 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 * Tries to join the wait list.
 		 */
 		joinWaitList:			function () {
-			if (this.getUser ().wlIndex !== undefined) {
+			if (this.getUser ().wlIndex !== undefined && this.getUser ().wlIndex > -1) {
 				return;
 			}
 
