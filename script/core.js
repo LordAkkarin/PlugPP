@@ -7,15 +7,19 @@
 define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 'Plug++/ResourceLoader', 'Plug++/dependency/Class'], function ($, _, Version, ModificationAPI, ResourceLoader, Class) {
 	'use strict';
 
-	// constants
-	var POLL_RATES = {
-		UPDATE_CHECK:	900000
-	};
+		// constants
+	var	POLL_RATES = {
+			UPDATE_CHECK:			900000
+		},
 
-	// cache
-	var CACHE = {
-		notificationVersion:	null
-	};
+		// cache
+		CACHE = {
+			notificationVersion:	null
+		},
+
+		// queue notification cache
+		QUEUE_NOTIFICATION_CACHE = null;
+
 
 	/**
 	 * Plug++ Core
@@ -358,11 +362,33 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		},
 
 		/**
+		 * Handles history updates.
+		 * @param history
+		 */
+		onHistoryUpdate:	function (history) {
+			if ((this.options.components.desktopNotification || this.options.components.notification) && (API.getNextMedia () && API.getNextMedia ().inHistory) && QUEUE_NOTIFICATION_CACHE != API.getNextMedia ().media.id) {
+				// normal notification
+				if (this.options.components.notification) {
+					ModificationAPI.notify ('Your queued track (' + API.getNextMedia ().media.title + ') has been played recently.');
+				}
+
+				// desktop notification
+				if (this.options.components.desktopNotification) {
+					ModificationAPI.notifyImportant ('History Notification', 'Your queued track (' + API.getNextMedia ().media.title + ') has been played recently.', ResourceLoader.get ('image', 'history.png'));
+				}
+
+				// store in cache
+				QUEUE_NOTIFICATION_CACHE = API.getNextMedia ().media.id;
+			}
+		},
+
+		/**
 		 * Registers all API events.
 		 */
 		registerEvents:		function () {
 			ModificationAPI.registerEvent (API.DJ_ADVANCE, this.onDjAdvance, this);
 			ModificationAPI.registerEvent (API.CHAT, this.onChat, this);
+			ModificationAPI.registerEvent (API.HISTORY_UPDATE, this.onHistoryUpdate, this);
 		},
 
 		/**
