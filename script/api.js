@@ -202,7 +202,7 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 * Requests notification API permissions.
 		 * @returns {boolean}
 		 */
-		notifyRequestPermissions:	function (callback) {
+		notifyRequestPermissions:	function (callback, denyCallback) {
 			if (!this.isNotificationAvailable ()) {
 				return false;
 			}
@@ -228,6 +228,11 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 					// issue callback
 					if (permission === 'granted' && callback !== undefined && callback !== null) {
 						callback ();
+					}
+
+					// issue deny callback
+					if (permission === 'denied' && denyCallback !== undefined && denyCallback !== null) {
+						denyCallback ();
 					}
 				});
 			}
