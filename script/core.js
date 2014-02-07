@@ -340,7 +340,13 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 					// check ID (pretty obvious)
 					// TODO: Add verification of the title (90% match)
 					if (data.media.id === value.id) {
-						ModificationAPI.notifyChat ('system', 'This song is already in the history (' + (index + 1) + ' out of ' + history.length + '). <a href="javascript:window.PlugPP.skipTrack ();">Click here to skip</a>');
+						// notify via chat
+						ModificationAPI.notifyChat ('system', 'This song is already in the history (' + (index + 1) + ' out of ' + history.length + '). <a href="javascript:window.PlugPP.skipHistoryTrack (' + index + 1 + ', ' + history.length + ');">Click here to skip</a>');
+
+						// notify via desktop notification
+						if (this.options.components.desktopNotification) {
+							ModificationAPI.notifyImportant ('Song in History', data.dj.username + ' is playing a song which has been played recently (' + (index + 1) + ' out of ' + history.length + ').', ResourceLoader.get ('image', 'history.png'));
+						}
 
 						// break out of each ()
 						return false;
@@ -405,6 +411,21 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 
 			// undefine global copy
 			delete window.PlugPP;
+		},
+
+		/**
+		 * Skips a track which has already been played.
+		 * @param index
+		 * @param length
+		 */
+		skipHistoryTrack:	function (index, length) {
+			var username = API.getDJ ().username;
+
+			// skip track
+			ModificationAPI.moderateSkip ();
+
+			// notify user
+			ModificationAPI.sendChat ('@' + username + ' song was in history (' + index + ' out of ' + length + ')');
 		},
 
 		/**
