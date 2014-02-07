@@ -78,9 +78,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			this.verifyAPI ();
 
 			// load options
-			/* if (typeof ModificationAPI.getStorage ('options') == 'object') {
-				this.options = _.extend (this.options, (ModificationAPI.getStorage ('options') || { }));
-			} */
+			this.options = _.extend (this.options, (JSON.parse (ModificationAPI.getStorage ('options')) || { }));
 
 			// register events and timers
 			this.registerTimers ();
@@ -134,10 +132,37 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			// enable/disable options
 			if (!ModificationAPI.hasPermission (null, ModificationAPI.getRole ('bouncer'))) {
 				$('#plugpp-moderator').addClass ('disabled');
+
+				// disable component
+				this.options.components.moderator.historyNotification = false;
 			}
 
 			if (!ModificationAPI.isNotificationAvailable ()) {
 				$('#plugpp-desktop-notification').addClass ('disabled');
+
+				// disable component
+				this.options.components.desktopNotification = false;
+			}
+
+			// update based on stored settings
+			if (this.options.components.autoWoot) {
+				$('#plugpp-autowoot').addClass ('enabled');
+			}
+
+			if (this.options.components.autoJoin) {
+				$('#plugpp-autojoin').addClass ('enabled');
+			}
+
+			if (this.options.components.notification) {
+				$('#plugpp-notification').addClass ('enabled');
+			}
+
+			if (this.options.components.desktopNotification) {
+				$('#plugpp-desktop-notification').addClass ('enabled');
+			}
+
+			if (this.options.components.moderator.historyNotification) {
+				$('#plugpp-moderator').addClass ('enabled');
 			}
 
 			// hook links
@@ -158,6 +183,52 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 				} else {
 					$('#plugpp-autowoot').removeClass ('enabled');
 				}
+
+				// update options
+				this.saveOptions ();
+			}, this));
+
+			$('#plugpp-autojoin').click ($.proxy (function () {
+				if ($('#plugpp-autojoin').hasClass ('disabled')) {
+					return;
+				}
+
+				// negate
+				this.options.components.autoJoin = !this.options.components.autoJoin;
+
+				// modify button
+				if (this.options.components.autoJoin) {
+					$('#plugpp-autojoin').addClass ('enabled');
+
+					// join queue
+					ModificationAPI.joinWaitList ();
+				} else {
+					$('#plugpp-autojoin').removeClass ('enabled');
+				}
+
+				// update options
+				this.saveOptions ();
+			}, this));
+
+			$('#plugpp-notification').click ($.proxy (function () {
+				if ($('#plugpp-notification').hasClass ('disabled')) {
+					return;
+				}
+
+				// negate
+				this.options.components.notification = !this.options.components.notification;
+
+				// TODO: Add settings for every notification type
+
+				// modify button
+				if (this.options.components.notification) {
+					$('#plugpp-notification').addClass ('enabled');
+				} else {
+					$('#plugpp-notification').removeClass ('enabled');
+				}
+
+				// update options
+				this.saveOptions ();
 			}, this));
 
 			$('#plugpp-desktop-notification').click ($.proxy (function () {
@@ -167,17 +238,43 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 
 				this.options.components.desktopNotification = !this.options.components.desktopNotification;
 
+				// TODO: Add settings for every notification type
+
 				// request permissions
 				if (this.options.components.desktopNotification) {
 					if (!ModificationAPI.notifyRequestPermissions (function () {
 						$('#plugpp-desktop-notification').addClass ('enabled');
+					}, function () {
+						$('#plugpp-desktop-notification').addClass ('disabled');
 					})) {
 						$('#plugpp-desktop-notification').addClass ('disabled');
 					}
 				} else {
 					$('#plugpp-desktop-notification').removeClass ('enabled');
 				}
-			}));
+
+				// update options
+				this.saveOptions ();
+			}, this));
+
+			$('#plugpp-moderator').click ($.proxy (function () {
+				if ($('#plugpp-moderator').hasClass ('disabled')) {
+					return;
+				}
+
+				// negate
+				this.options.components.moderator.historyNotification = !this.options.components.moderator.historyNotification;
+
+				// modify button
+				if (this.options.components.moderator.historyNotification) {
+					$('#plugpp-moderator').addClass ('enabled');
+				} else {
+					$('#plugpp-moderator').removeClass ('enabled');
+				}
+
+				// update options
+				this.saveOptions ();
+			}, this));
 		},
 
 		/**
@@ -211,6 +308,11 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 						this.timeouts.autoWoot = null;
 					}, this), this.options.autoWoot.delay);
 				}
+			}
+
+			// auto join
+			if (this.options.components.autoJoin) {
+				ModificationAPI.joinWaitList ();
 			}
 
 			// history check
@@ -255,6 +357,13 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		},
 
 		/**
+		 * Saves the options.
+		 */
+		saveOptions:		function () {
+			ModificationAPI.setStorage ('options', JSON.stringify (this.options));
+		},
+
+		/**
 		 * Shuts down all components.
 		 */
 		shutdown:		function () {
@@ -262,7 +371,7 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 			ModificationAPI.notifyChat ('system', 'Disabling Plug++ ...', null);
 
 			// store settings
-			// ModificationAPI.setStorage ('options', this.options);
+			this.saveOptions ();
 
 			if (!!this.stylesheet) {
 				this.stylesheet.remove (this.stylesheet);
