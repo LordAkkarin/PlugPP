@@ -117,6 +117,13 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		},
 
 		/**
+		 * Skips the current track.
+		 */
+		moderateSkip:			function () {
+			API.moderateSkip ();
+		},
+
+		/**
 		 * Notifies a user.
 		 * @param message
 		 * @param icon
@@ -248,6 +255,14 @@ define ('Plug++/API', ['jquery', 'Plug++/ResourceLoader', 'Plug++/dependency/Con
 		 */
 		registerEvent:			function (eventName, callback, context) {
 			API.on (eventName, callback, context);
+		},
+
+		/**
+		 * Sends a message.
+		 * @param message
+		 */
+		sendChat:			function (message) {
+			API.sendChat (message);
 		},
 
 		/**
