@@ -282,7 +282,10 @@ define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 
 		 * @param data
 		 */
 		onChat:			function (data) {
-
+			// handle mentions
+			if (data.type === 'mention' && this.options.components.desktopNotification) {
+				ModificationAPI.notifyImportant ('Mentioned by ' + data.from, data.message, ResourceLoader.get ('image', 'mention.png'));
+			}
 		},
 
 		/**
