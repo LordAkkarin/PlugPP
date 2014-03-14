@@ -66,6 +66,13 @@ module.exports = function (grunt) {
 			},
 			src:						'dist/style/plug-pp.css'
 		},
+		'gh-pages':		{
+			options:			{
+				add:					true,
+				message:				'Updated distribution.'
+			},
+			src:				['dist/**']
+		},
 		jshint:			{
 			options:			{
 				jshintrc:				'script/.jshintrc'
@@ -135,4 +142,5 @@ module.exports = function (grunt) {
 
 	// default task
 	grunt.registerTask ('default', ['clean', 'jshint', 'less', 'concat', 'uglify', 'csslint', 'copy', 'version']);
+	grunt.registerTask ('deploy', ['clean', 'jshint', 'less', 'concat', 'uglify', 'csslint', 'copy', 'version', 'gh-pages']);
 };
