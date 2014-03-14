@@ -69,7 +69,8 @@ module.exports = function (grunt) {
 		'gh-pages':		{
 			options:			{
 				add:					true,
-				message:				'Updated distribution.'
+				message:				'Updated distribution.',
+				repo:					'git@github.com:LordAkkarin/PlugPP.git'
 			},
 			src:				['dist/**']
 		},
