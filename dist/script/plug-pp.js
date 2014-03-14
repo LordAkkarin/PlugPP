@@ -3,7 +3,7 @@
  * @copyright			Copyright (C) 2014 Evil-Co <http://www.evil-co.org>
  * @license			GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.txt>
  */
-define ('Plug++/ResourceURL', function () { 'use strict'; return 'lordakkarin.github.io/PlugPP/dist/'; });
+define ('Plug++/ResourceURL', function () { 'use strict'; return 'http://lordakkarin.github.io/PlugPP/dist/'; });
 define ('Plug++/Version', function () { 'use strict'; return '1.0.0'; });
 define ('Plug++/Core', ['jquery', 'underscore', 'Plug++/Version', 'Plug++/API', 'Plug++/ResourceLoader', 'Plug++/dependency/Class'], function ($, _, Version, ModificationAPI, ResourceLoader, Class) {
 	'use strict';
