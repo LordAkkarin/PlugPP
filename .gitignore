@@ -8,3 +8,16 @@
 ##########
 .idea
 *.iml
+less/*.css
+
+# Nodejs
+##########
+node_modules/
+
+# Windows
+##########
+Thumbs.db
+
+# Licensing
+##########
+*.svg
