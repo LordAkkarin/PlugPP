@@ -1,5 +1,5 @@
 /**
- * Plug++ 1.0.0 (compiled on 03/14/2014)
+ * Plug++ 1.0.0 (compiled on 06/21/2014)
  * @copyright			Copyright (C) 2014 Evil-Co <http://www.evil-co.org>
  * @license			GNU Lesser General Public License <http://www.gnu.org/licenses/lgpl.txt>
  */
