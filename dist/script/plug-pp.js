@@ -837,6 +837,10 @@ require (['jquery', 'Plug++/ResourceLoader'], function ($, ResourceLoader) {
 			$(data).each (function (index, element) {
 				// verify version
 				if (!requirejs.defined (element.mapping)) {
+					// log
+					if (!!console) console.info ('Could not find dependency ' + element.name + ' (' + element.mapping + ').');
+				
+					// stop execution
 					versionMismatch = true;
 					return;
 				}

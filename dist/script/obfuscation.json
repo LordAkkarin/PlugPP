@@ -1,14 +1,14 @@
 obfuscationMapping([
 	{
 		"name":		"Class",
-		"mapping":	"ba783/cb11e/b58aa"
+		"mapping":	"e1722/cdacb/af76a"
 	},
 	{
 		"name":		"Context",
-		"mapping":	"ba783/cb11e/a882f"
+		"mapping":	"e1722/cdacb/eb26b"
 	},
 	{
 		"name":		"PopoutView",
-		"mapping":	"ba783/a849a/a1f3e/f1c3a/a7bd3"
+		"mapping":	"e1722/cdacb/eb26b"
 	}
 ]);
