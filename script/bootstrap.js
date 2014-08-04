@@ -12,13 +12,33 @@ require (['jquery', 'Plug++/ResourceLoader'], function ($, ResourceLoader) {
 		dataType:	'jsonp',
 		jsonpCallback:	'obfuscationMapping',
 		success:	function (data) {
+			var versionMismatch = false;
+		
 			// loop through dependencies
 			$(data).each (function (index, element) {
+				// verify version
+				if (!requirejs.defined (element.mapping)) {
+					versionMismatch = true;
+					return;
+				}
+			
 				// create alias for dependency
 				define ('Plug++/dependency/' + element.name, [element.mapping], function (obj) {
 					return obj;
 				});
 			});
+			
+			// handle version mismatches
+			if (versionMismatch) {
+				// log error
+				if (!!API)
+					API.chatLog ('The Plug++ obfuscation mappings have not been updated yet. Please report this error at https://github.com/LordAkkarin/PlugPP/issues');
+				else if (!!console)
+					console.info ('The Plug++ obfuscation mappings have not been updated yet. Please report this error at https://github.com/LordAkkarin/PlugPP/issues');
+				
+				// stop bootstrapping
+				return;
+			}
 
 			// bootstrap
 			require (['Plug++/Core'], function (PlugPP) {
